@@ -1,4 +1,5 @@
 ;; Hacker mode
+(setq ring-bell-function 'ignore)
 (scroll-bar-mode -1)
 (setq inhibit-splash-screen t)
 (setq inhibit-startup-message t)
@@ -11,6 +12,7 @@
 (setq auto-save-file-name-transforms
       `((".*" ,temporary-file-directory t)))
 
+;; Automatic shit
 (require 'package)
 (require 'cl)
 
@@ -42,13 +44,17 @@
 
 (cfg:install-packages)
 
+;; Trust
 (custom-set-variables
  '(custom-safe-themes
    (quote
     ("01ce486c3a7c8b37cf13f8c95ca4bb3c11413228b35676025fdf239e77019ea1" default))))
 
+;; Theme
 (load-theme 'reykjavik)
 (require 'key-chord)
+
+;; Customizations
 (key-chord-mode 1)
 
 (require 'helm-config)
