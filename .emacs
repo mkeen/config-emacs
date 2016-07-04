@@ -59,6 +59,8 @@
 
 ;; Customizations
 (key-chord-mode 1)
+(setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
+(setq scroll-step 1) ;; keyboard scroll one line at a time
 
 (require 'helm-config)
 (global-set-key (kbd "M-x") 'helm-M-x)
