@@ -6,6 +6,9 @@
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 
+;; To each his own
+(when window-system (set-frame-size (selected-frame) 85 45))
+
 ;; Don't leave junk files everywhere
 (setq backup-directory-alist
       `((".*" . ,temporary-file-directory)))
