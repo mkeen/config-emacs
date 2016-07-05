@@ -75,3 +75,20 @@
 
 (require 'elixir-mode)
 (require 'alchemist)
+
+(setq-default indent-tabs-mode nil)
+
+(add-to-list 'load-path "~/.emacs.d/custom")
+(require 'web-mode)
+
+(defun my-web-mode-hook ()
+  (setq web-mode-markup-indent-offset 2)
+  (setq web-mode-css-indent-offset 2)
+  (setq web-mode-code-indent-offset 2)
+  (setq web-mode-indent-style 2)
+  (if (equal web-mode-content-type "javascript")
+      (web-mode-set-content-type "jsx")))
+
+(add-hook 'web-mode-hook  'my-web-mode-hook)
+
+(add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode))
