@@ -78,7 +78,6 @@
 
 (setq-default indent-tabs-mode nil)
 
-(add-to-list 'load-path "~/.emacs.d/custom")
 (require 'web-mode)
 
 (defun my-web-mode-hook ()
