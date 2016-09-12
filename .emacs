@@ -6,6 +6,9 @@
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 
+;; HiDPI
+(set-default-font "Monospace-14")
+
 ;; To each his own
 (when window-system (set-frame-size (selected-frame) 85 45))
 
@@ -30,6 +33,11 @@
 			reykjavik-theme
 			key-chord
 			helm
+                        flycheck
+                        tide
+                        projectile
+                        helm-projectile
+                        neotree
                         ))
 
 (defun cfg:install-packages ()
@@ -39,9 +47,9 @@
       (dolist (p elpa-packages)
         (package-install p)))))
 
-(add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/") t)
-(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
-(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
+;(add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/") t)
+(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+;(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
 
 (package-initialize)
 
@@ -73,6 +81,11 @@
 (setq company-minimum-prefix-length 2)
 (setq company-tooltip-flip-when-above t)
 
+(projectile-global-mode)
+(require 'helm-projectile)
+(helm-projectile-on)
+(global-set-key [f8] 'neotree-toggle)
+
 (require 'elixir-mode)
 (require 'alchemist)
 
@@ -80,14 +93,31 @@
 
 (require 'web-mode)
 
+;(add-to-list 'load-path "~/.emacs.d/custom")
+;(require 'flycheck-typescript-tslint)
+
+(defun setup-tide-mode ()
+  (interactive)
+  (tide-setup)
+  (flycheck-mode t)
+  (setq flycheck-check-syntax-automatically '(save mode-enabled))
+  (eldoc-mode t))
+
+;; aligns annotation to the right hand side
+(setq company-tooltip-align-annotations t)
+
+;; formats the buffer before saving
+(add-hook 'before-save-hook 'tide-format-before-save)
+
+;; see https://github.com/Microsoft/TypeScript/blob/cc58e2d7eb144f0b2ff89e6a6685fb4deaa24fde/src/server/protocol.d.ts#L421-473 for the full list available options
+
+(add-hook 'typescript-mode-hook #'setup-tide-mode)
+
 (defun my-web-mode-hook ()
   (setq web-mode-markup-indent-offset 2)
   (setq web-mode-css-indent-offset 2)
   (setq web-mode-code-indent-offset 2)
-  (setq web-mode-indent-style 2)
-  (if (equal web-mode-content-type "javascript")
-      (web-mode-set-content-type "jsx")))
+  (setq web-mode-indent-style 2))
 
 (add-hook 'web-mode-hook  'my-web-mode-hook)
-
-(add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode))
+(setq tide-tsserver-process-environment '("TSS_LOG=-level verbose -file /tmp/tss.log"))
