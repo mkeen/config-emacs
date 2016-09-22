@@ -7,7 +7,7 @@
 (tool-bar-mode -1)
 
 ;; HiDPI
-(set-default-font "Monospace-14")
+;(set-default-font "Monospace-14")
 
 ;; To each his own
 (when window-system (set-frame-size (selected-frame) 85 45))
@@ -30,7 +30,7 @@
 			company-web
 			yaml-mode
 			markdown-mode
-			reykjavik-theme
+			danneskjold-theme
 			key-chord
 			helm
                         flycheck
@@ -48,7 +48,7 @@
         (package-install p)))))
 
 ;(add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/") t)
-(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 ;(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
 
 (package-initialize)
@@ -57,12 +57,16 @@
 
 ;; Trust
 (custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    (quote
-    ("01ce486c3a7c8b37cf13f8c95ca4bb3c11413228b35676025fdf239e77019ea1" default))))
+    ("b2db1708af2a7d50cac271be91908fffeddb04c66cb1a853fff749c7ad6926ae" "01ce486c3a7c8b37cf13f8c95ca4bb3c11413228b35676025fdf239e77019ea1" default))))
 
 ;; Theme
-(load-theme 'reykjavik)
+(load-theme 'danneskjold)
 (require 'key-chord)
 
 ;; Customizations
@@ -121,3 +125,9 @@
 
 (add-hook 'web-mode-hook  'my-web-mode-hook)
 (setq tide-tsserver-process-environment '("TSS_LOG=-level verbose -file /tmp/tss.log"))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
