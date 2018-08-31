@@ -6,8 +6,8 @@
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 
-;; HiDPI
-;(set-default-font "Monospace-14")
+;; Font
+(set-default-font "EnvyCodeR-12")
 
 ;; To each his own
 (when window-system (set-frame-size (selected-frame) 85 45))
@@ -21,16 +21,24 @@
 ;; Automatic shit
 (require 'package)
 (require 'cl)
+(require 'format-spec)
+
+;; Scrolling Smooth
+;; scroll one line at a time (less "jumpy" than defaults)
+(setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
+(setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
+(setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
+(setq scroll-step 1) ;; keyboard scroll one line at a time
 
 (defvar elpa-packages '(
                         company
-			alchemist
 			magit
 			web-mode
 			company-web
 			yaml-mode
+                        ruby-mode
+                        rhtml-mode
 			markdown-mode
-			danneskjold-theme
 			key-chord
 			helm
                         flycheck
@@ -38,6 +46,13 @@
                         projectile
                         helm-projectile
                         neotree
+                        flymake-ruby
+                        terraform-mode
+                        salt-mode
+                        nvm
+                        groovy-mode
+                        doom-themes
+                        solidity-mode
                         ))
 
 (defun cfg:install-packages ()
@@ -56,27 +71,24 @@
 (cfg:install-packages)
 
 ;; Trust
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   (quote
-    ("b2db1708af2a7d50cac271be91908fffeddb04c66cb1a853fff749c7ad6926ae" "01ce486c3a7c8b37cf13f8c95ca4bb3c11413228b35676025fdf239e77019ea1" default))))
+
 
 ;; Theme
-(load-theme 'danneskjold)
+(load-theme 'doom-one t)
 (require 'key-chord)
 
 ;; Customizations
 (key-chord-mode 1)
 (setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
 (setq scroll-step 1) ;; keyboard scroll one line at a time
+(global-set-key (kbd "C-c C-g") 'solidity-estimate-gas-at-point) ;; solidity gas estimate
+(setq solidity-flycheck-solc-checker-active t)
+(setq solidity-solc-path "/usr/bin/solc")
 
 (require 'helm-config)
 (global-set-key (kbd "M-x") 'helm-M-x)
 (global-set-key (kbd "C-x C-f") 'helm-find-files)
+(global-set-key (kbd "C-x g") 'magit-status)
 
 (global-company-mode 1)
 
@@ -84,28 +96,32 @@
 (setq company-tooltip-limit 10)
 (setq company-minimum-prefix-length 2)
 (setq company-tooltip-flip-when-above t)
+(setq company-dabbrev-downcase nil)
+
+(require 'flymake-ruby)
+(add-hook 'ruby-mode-hook 'flymake-ruby-load)
 
 (projectile-global-mode)
 (require 'helm-projectile)
 (helm-projectile-on)
 (global-set-key [f8] 'neotree-toggle)
 
-(require 'elixir-mode)
-(require 'alchemist)
-
 (setq-default indent-tabs-mode nil)
+(setq tab-width 2)
 
 (require 'web-mode)
 
 ;(add-to-list 'load-path "~/.emacs.d/custom")
 ;(require 'flycheck-typescript-tslint)
-
 (defun setup-tide-mode ()
+  (require 'nvm)
+  (nvm-use "v10.1.0")
   (interactive)
   (tide-setup)
   (flycheck-mode t)
   (setq flycheck-check-syntax-automatically '(save mode-enabled))
-  (eldoc-mode t))
+  (eldoc-mode t)
+  (setq typescript-indent-level 2))
 
 ;; aligns annotation to the right hand side
 (setq company-tooltip-align-annotations t)
@@ -117,11 +133,13 @@
 
 (add-hook 'typescript-mode-hook #'setup-tide-mode)
 
+(setq js-indent-level 2)
+
 (defun my-web-mode-hook ()
   (setq web-mode-markup-indent-offset 2)
   (setq web-mode-css-indent-offset 2)
   (setq web-mode-code-indent-offset 2)
-  (setq web-mode-indent-style 2))
+  (setq web-mode-indent-style 1))
 
 (add-hook 'web-mode-hook  'my-web-mode-hook)
 (setq tide-tsserver-process-environment '("TSS_LOG=-level verbose -file /tmp/tss.log"))
@@ -131,3 +149,13 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+(setq tide-tsserver-process-environment '("TSS_LOG=-level verbose"))
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (vcl-mode go-mode go django-mode dockerfile-mode solidity-mode php-mode doom-themes projectile flycheck helm ruby-mode yaml-mode company web-mode ujelly-theme tide terraform-mode sourcerer-theme salt-mode rhtml-mode neotree markdown-mode magit key-chord inkpot-theme helm-projectile groovy-mode flymake-ruby danneskjold-theme company-web))))
