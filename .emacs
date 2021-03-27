@@ -13,7 +13,7 @@
       `((".*" ,temporary-file-directory t)))
 
 ;; Font
-(set-default-font "EnvyCodeR-10")
+;(set-default-font "EnvyCodeR-10")
 
 ;; Smooth Scrolling
 (setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
@@ -22,7 +22,7 @@
 
 ;; Packages & Such
 (require 'package)
-(require 'cl)
+(require 'cl-lib)
 
 (defvar elpa-packages '(
                         company
@@ -30,8 +30,6 @@
 			web-mode
 			company-web
 			yaml-mode
-                        ruby-mode
-                        rhtml-mode
 			markdown-mode
 			key-chord
 			helm
@@ -39,16 +37,13 @@
                         tide
                         projectile
                         helm-projectile
-                        neotree
-                        flymake-ruby
                         terraform-mode
                         salt-mode
                         doom-themes
-                        solidity-mode
                         ))
 
 (defun cfg:install-packages ()
-  (let ((pkgs (remove-if #'package-installed-p elpa-packages)))
+  (let ((pkgs (cl-remove-if #'package-installed-p elpa-packages)))
     (when pkgs
       (package-refresh-contents)
       (dolist (p elpa-packages)
@@ -92,9 +87,6 @@
 (global-set-key (kbd "C-c C-g") 'solidity-estimate-gas-at-point)
 (setq solidity-flycheck-solc-checker-active t)
 (setq solidity-solc-path "/usr/bin/solc")
-
-(require 'flymake-ruby)
-(add-hook 'ruby-mode-hook 'flymake-ruby-load)
 
 (setq-default indent-tabs-mode nil)
 (setq tab-width 2)
@@ -143,5 +135,5 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   (quote
-    (haskell-mode vcl-mode go-mode go django-mode dockerfile-mode solidity-mode php-mode doom-themes projectile flycheck helm ruby-mode yaml-mode company web-mode ujelly-theme tide terraform-mode sourcerer-theme salt-mode rhtml-mode neotree markdown-mode magit key-chord inkpot-theme helm-projectile groovy-mode flymake-ruby danneskjold-theme company-web))))
+   '(haskell-mode vcl-mode go-mode go django-mode dockerfile-mode solidity-mode php-mode doom-themes projectile flycheck helm ruby-mode yaml-mode company web-mode ujelly-theme tide terraform-mode sourcerer-theme salt-mode rhtml-mode neotree markdown-mode magit key-chord inkpot-theme helm-projectile groovy-mode flymake-ruby danneskjold-theme company-web)))
+
